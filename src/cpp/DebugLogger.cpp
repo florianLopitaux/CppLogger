@@ -1,12 +1,38 @@
+/**
+ * @file src.cpp.DebugLogger.cpp
+ * @author Florian Lopitaux
+ * @version 0.1
+ * @brief source file of the DebugLogger class. Implements all methods.
+ * 
+ * --------------------------------------------------------------------
+ *
+ * Copyright (C) 2023  Florian Lopitaux
+ *
+ * Use of this software is governed by the GNU Public License, version 3.
+ *
+ * CppLogger is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * CppLogger is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CppLogger. If not, see <http://www.gnu.org/licenses/>.
+ * 
+ * This banner notice must not be removed.
+ * 
+ * --------------------------------------------------------------------
+ */
+
 #include "DebugLogger.h"
 
 #include <algorithm>
 #include <sstream>
 #include "windows.h"
-
-
-const char VALID_COLOR_CHARACTERS[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-                                       'A', 'B', 'C', 'D', 'E', 'F'};
 
 
 /*
