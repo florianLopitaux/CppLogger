@@ -117,20 +117,22 @@ namespace nsCppLogger {
              * 
              * Print the trace of the error with the custom displaying.
              * 
+             * @param logLevel [in] : The level needed to print the log
              * @param title [in] : The text resume of the error
              * @param msg [in] : The complete message description of the error
              */
-            void error(const std::string & title, const std::string & msg);
+            void error(const unsigned logLevel, const std::string & title, const std::string & msg);
 
             /**
              * @brief Print a warning in the terminal.
              * 
              * Print the trace of the warning with the custom displaying.
              * 
+             * @param logLevel [in] : The level needed to print the log
              * @param title [in] : The text resume of the warning
              * @param msg [in] : The complete message description of the warning
              */
-            void warning(const std::string & title, const std::string & msg);
+            void warning(const unsigned logLevel, const std::string & title, const std::string & msg);
 
         private:
             // FIELDS

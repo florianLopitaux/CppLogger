@@ -88,7 +88,14 @@ void nsCppLogger::DebugLogger::setWarningColors(const LoggerColor primaryColor, 
 * PUBLIC METHODS
 * ---------------------------------------------
 */
-void nsCppLogger::DebugLogger::error(const std::string & title, const std::string & msg) {
+void nsCppLogger::DebugLogger::error(const unsigned logLevel,
+                                     const std::string & title, const std::string & msg) {
+
+    // check if we have the right to print the log
+    if (this->debugLevel < logLevel) {
+        return;
+    }
+
     // print title and set principal color
     system("Color 0" + this->errorColors.first);
     std::cout << "[LOG ERROR] - " << title << std::endl;
@@ -101,7 +108,14 @@ void nsCppLogger::DebugLogger::error(const std::string & title, const std::strin
     system("Color 07");
 }
 
-void nsCppLogger::DebugLogger::warning(const std::string & title, const std::string & msg) {
+void nsCppLogger::DebugLogger::warning(const unsigned logLevel,
+                                       const std::string & title, const std::string & msg) {
+    
+    // check if we have the right to print the log
+    if (this->debugLevel < logLevel) {
+        return;
+    }
+
     // print title and set principal color
     system("Color 0" + this->warningColors.first);
     std::cout << "[LOG WARNING] - " << title << std::endl;
