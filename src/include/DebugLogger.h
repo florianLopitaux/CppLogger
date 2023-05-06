@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "LoggerColor.h"
+
 
 namespace nsCppLogger {
     typedef std::pair<char, char> textColor_t;
@@ -19,10 +21,8 @@ namespace nsCppLogger {
 
             // SETTERS
             void setDebugLevel(const unsigned level);
-            void setErrorColors(const textColor_t & colors);
-            void setErrorColors(const char primaryColor, const char secondaryColor);
-            void setWarningColors(const textColor_t & colors);
-            void setWarningColors(const char primaryColor, const char secondaryColor);
+            void setErrorColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setWarningColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
 
 
             // METHODS
@@ -38,7 +38,7 @@ namespace nsCppLogger {
 
 
             // METHODS
-            bool checkColorCharacter(const char idColor);
+            char convertColorEnumToChar(const LoggerColor color);
     };
 }
 

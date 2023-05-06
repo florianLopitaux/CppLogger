@@ -1,6 +1,7 @@
 #include "DebugLogger.h"
 
 #include <algorithm>
+#include <sstream>
 #include "windows.h"
 
 
@@ -40,32 +41,19 @@ void nsCppLogger::DebugLogger::setDebugLevel(const unsigned level) {
     this->debugLevel = level;
 }
 
-void nsCppLogger::DebugLogger::setErrorColors(const char primaryColor, const char secondaryColor) {
-    // check if color characters are valid
-    if (this->checkColorCharacter(primaryColor) || this->checkColorCharacter(secondaryColor)) {
-        throw new std::invalid_argument("One color character passed as parameter are wrong !"
-            " See the class documentation to see all possible values.");
-    }
+void nsCppLogger::DebugLogger::setErrorColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
+    // convert LoggerColor parameteres to characters id
+    char firstColor = this->convertColorEnumToChar(primaryColor);
+    char secondColor = this->convertColorEnumToChar(secondaryColor);
 
-    this->errorColors = std::make_pair(primaryColor, secondaryColor);
+    this->errorColors = std::make_pair(firstColor, secondColor);
 }
+void nsCppLogger::DebugLogger::setWarningColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
+    // convert LoggerColor parameteres to characters id
+    char firstColor = this->convertColorEnumToChar(primaryColor);
+    char secondColor = this->convertColorEnumToChar(secondaryColor);
 
-void nsCppLogger::DebugLogger::setErrorColors(const textColor_t & colors) {
-    this->setErrorColors(colors.first, colors.second);
-}
-
-void nsCppLogger::DebugLogger::setWarningColors(const char primaryColor, const char secondaryColor) {
-    // check if color characters are valid
-    if (this->checkColorCharacter(primaryColor) || this->checkColorCharacter(secondaryColor)) {
-        throw new std::invalid_argument("One color character passed as parameter are wrong !"
-            " See the class documentation to see all possible values.");
-    }
-
-    this->warningColors = std::make_pair(primaryColor, secondaryColor);
-}
-
-void nsCppLogger::DebugLogger::setWarningColors(const textColor_t & colors) {
-    this->setWarningColors(colors.first, colors.second);
+    this->warningColors = std::make_pair(firstColor, secondColor);
 }
 
 
@@ -106,7 +94,9 @@ void nsCppLogger::DebugLogger::warning(const std::string & title, const std::str
 * PRIVATE METHODS
 * ---------------------------------------------
 */
-bool nsCppLogger::DebugLogger::checkColorCharacter(const char idColor) {
-    return std::find(VALID_COLOR_CHARACTERS, std::end(VALID_COLOR_CHARACTERS), idColor)
-                != std::end(VALID_COLOR_CHARACTERS);
+char nsCppLogger::DebugLogger::convertColorEnumToChar(const LoggerColor color) {
+    std::ostringstream stringStream;
+    stringStream << std::hex << color;
+
+    return stringStream.str()[0];
 }
