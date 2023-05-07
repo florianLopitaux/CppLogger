@@ -30,22 +30,19 @@
 
 #include "DebugLogger.h"
 
-#include <algorithm>
-#include <sstream>
-#include "windows.h"
-
 
 /*
 * ---------------------------------------------
 * CONSTRUCTOR
 * ---------------------------------------------
 */
-nsCppLogger::DebugLogger::DebugLogger(const unsigned level = 0) {
+nsCppLogger::DebugLogger::DebugLogger(const unsigned level) {
     this->debugLevel = level;
 
-    this->errorColors = std::make_pair('4', 'C');
-    this->warningColors = std::make_pair('6', 'E');
-    this->infoColors = std::make_pair('2', 'A');
+    this->outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    this->errorColors = std::make_pair(LoggerColor::RED, LoggerColor::LIGHT_RED);
+    this->warningColors = std::make_pair(LoggerColor::YELLOW, LoggerColor::LIGHT_YELLOW);
+    this->infoColors = std::make_pair(LoggerColor::GREEN, LoggerColor::LIGHT_GREEN);
 }
 
 
@@ -69,26 +66,14 @@ void nsCppLogger::DebugLogger::setDebugLevel(const unsigned level) {
 }
 
 void nsCppLogger::DebugLogger::setErrorColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
-    // convert LoggerColor parameteres to characters id
-    char firstColor = this->convertColorEnumToChar(primaryColor);
-    char secondColor = this->convertColorEnumToChar(secondaryColor);
-
-    this->errorColors = std::make_pair(firstColor, secondColor);
+    this->errorColors = std::make_pair(primaryColor, secondaryColor);
 }
 void nsCppLogger::DebugLogger::setWarningColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
-    // convert LoggerColor parameteres to characters id
-    char firstColor = this->convertColorEnumToChar(primaryColor);
-    char secondColor = this->convertColorEnumToChar(secondaryColor);
-
-    this->warningColors = std::make_pair(firstColor, secondColor);
+    this->warningColors = std::make_pair(primaryColor, secondaryColor);
 }
 
 void nsCppLogger::DebugLogger::setInformationColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
-    // convert LoggerColor parameteres to characters id
-    char firstColor = this->convertColorEnumToChar(primaryColor);
-    char secondColor = this->convertColorEnumToChar(secondaryColor);
-
-    this->infoColors = std::make_pair(firstColor, secondColor);
+    this->infoColors = std::make_pair(primaryColor, secondaryColor);
 }
 
 
@@ -100,70 +85,76 @@ void nsCppLogger::DebugLogger::setInformationColors(const LoggerColor primaryCol
 void nsCppLogger::DebugLogger::error(const unsigned logLevel,
                                      const std::string & typeError, const std::string & msg) {
 
+    if (logLevel == 0) {
+        throw new std::invalid_argument("log level can't be to 0, this level is the release mode");
+    }
+
     // check if we have the right to print the log
-    if (this->debugLevel < logLevel) {
+    if (this->debugLevel == 0 || this->debugLevel < logLevel) {
         return;
     }
 
     // print title and set principal color
-    system("Color 0" + this->errorColors.first);
-    std::cout << "[LOG ERROR] - " << typeError << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->errorColors.first);
+    std::cout << std::endl
+              << "[LOG ERROR] - " << typeError
+              << std::endl;
 
     // print message trace and set secondary color
-    system("Color 0" + this->errorColors.second);
-    std::cout << "Trace : " << msg << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->errorColors.second);
+    std::cout << "Trace : " << msg
+              << std::endl << std::endl;
 
     // reset terminal default color
-    system("Color 07");
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
 }
 
 void nsCppLogger::DebugLogger::warning(const unsigned logLevel, const std::string & msg) {
-    
+    if (logLevel == 0) {
+        throw new std::invalid_argument("log level can't be to 0, this level is the release mode");
+    }
+
     // check if we have the right to print the log
-    if (this->debugLevel < logLevel) {
+    if (this->debugLevel == 0 || this->debugLevel < logLevel) {
         return;
     }
 
     // print title and set principal color
-    system("Color 0" + this->warningColors.first);
-    std::cout << "[LOG WARNING]" << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->warningColors.first);
+    std::cout << std::endl 
+              << "[LOG WARNING]" 
+              << std::endl;
 
     // print message trace and set secondary color
-    system("Color 0" + this->warningColors.second);
-    std::cout << "Trace : " << msg << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->warningColors.second);
+    std::cout << "Trace : " << msg
+              << std::endl << std::endl;
 
     // reset terminal default color
-    system("Color 07");
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
 }
 
 void nsCppLogger::DebugLogger::inform(const unsigned logLevel, const std::string & msg) {
-    
+    if (logLevel == 0) {
+        throw new std::invalid_argument("log level can't be to 0, this level is the release mode");
+    }
+
     // check if we have the right to print the log
-    if (this->debugLevel < logLevel) {
+    if (this->debugLevel == 0 || this->debugLevel < logLevel) {
         return;
     }
 
     // print title and set principal color
-    system("Color 0" + this->infoColors.first);
-    std::cout << "[LOG INFORMATION]" << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->infoColors.first);
+    std::cout << std::endl 
+              << "[LOG INFORMATION]" 
+              << std::endl;
 
     // print message trace and set secondary color
-    system("Color 0" + this->infoColors.second);
-    std::cout << "Trace : " << msg << std::endl;
+    SetConsoleTextAttribute(this->outHandle, this->infoColors.second);
+    std::cout << "Trace : " << msg
+              << std::endl << std::endl;
 
     // reset terminal default color
-    system("Color 07");
-}
-
-
-/*
-* ---------------------------------------------
-* PRIVATE METHODS
-* ---------------------------------------------
-*/
-char nsCppLogger::DebugLogger::convertColorEnumToChar(const LoggerColor color) {
-    std::ostringstream stringStream;
-    stringStream << std::hex << color;
-
-    return stringStream.str()[0];
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
 }

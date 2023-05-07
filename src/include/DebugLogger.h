@@ -32,6 +32,7 @@
 #define DEBUG_LOGGER_H
 
 #include <iostream>
+#include "windows.h"
 
 #include "LoggerColor.h"
 
@@ -45,7 +46,7 @@ namespace nsCppLogger {
      * @typedef textColor_t
      * @brief Type representing the two colors needed by a type log. 
      */
-    typedef std::pair<char, char> textColor_t;
+    typedef std::pair<LoggerColor, LoggerColor> textColor_t;
 
     /**
      * @class DebugLogger
@@ -157,6 +158,7 @@ namespace nsCppLogger {
             // FIELDS
             unsigned debugLevel;
             
+            HANDLE outHandle;
             textColor_t errorColors;
             textColor_t warningColors;
             textColor_t infoColors;
