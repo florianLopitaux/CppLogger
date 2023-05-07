@@ -45,6 +45,7 @@ nsCppLogger::DebugLogger::DebugLogger(const unsigned level = 0) {
 
     this->errorColors = std::make_pair('4', 'C');
     this->warningColors = std::make_pair('6', 'E');
+    this->infoColors = std::make_pair('2', 'A');
 }
 
 
@@ -82,6 +83,14 @@ void nsCppLogger::DebugLogger::setWarningColors(const LoggerColor primaryColor, 
     this->warningColors = std::make_pair(firstColor, secondColor);
 }
 
+void nsCppLogger::DebugLogger::setInformationColors(const LoggerColor primaryColor, const LoggerColor secondaryColor) {
+    // convert LoggerColor parameteres to characters id
+    char firstColor = this->convertColorEnumToChar(primaryColor);
+    char secondColor = this->convertColorEnumToChar(secondaryColor);
+
+    this->infoColors = std::make_pair(firstColor, secondColor);
+}
+
 
 /*
 * ---------------------------------------------
@@ -89,7 +98,7 @@ void nsCppLogger::DebugLogger::setWarningColors(const LoggerColor primaryColor, 
 * ---------------------------------------------
 */
 void nsCppLogger::DebugLogger::error(const unsigned logLevel,
-                                     const std::string & title, const std::string & msg) {
+                                     const std::string & typeError, const std::string & msg) {
 
     // check if we have the right to print the log
     if (this->debugLevel < logLevel) {
@@ -98,7 +107,7 @@ void nsCppLogger::DebugLogger::error(const unsigned logLevel,
 
     // print title and set principal color
     system("Color 0" + this->errorColors.first);
-    std::cout << "[LOG ERROR] - " << title << std::endl;
+    std::cout << "[LOG ERROR] - " << typeError << std::endl;
 
     // print message trace and set secondary color
     system("Color 0" + this->errorColors.second);
@@ -108,8 +117,7 @@ void nsCppLogger::DebugLogger::error(const unsigned logLevel,
     system("Color 07");
 }
 
-void nsCppLogger::DebugLogger::warning(const unsigned logLevel,
-                                       const std::string & title, const std::string & msg) {
+void nsCppLogger::DebugLogger::warning(const unsigned logLevel, const std::string & msg) {
     
     // check if we have the right to print the log
     if (this->debugLevel < logLevel) {
@@ -118,10 +126,29 @@ void nsCppLogger::DebugLogger::warning(const unsigned logLevel,
 
     // print title and set principal color
     system("Color 0" + this->warningColors.first);
-    std::cout << "[LOG WARNING] - " << title << std::endl;
+    std::cout << "[LOG WARNING]" << std::endl;
 
     // print message trace and set secondary color
     system("Color 0" + this->warningColors.second);
+    std::cout << "Trace : " << msg << std::endl;
+
+    // reset terminal default color
+    system("Color 07");
+}
+
+void nsCppLogger::DebugLogger::inform(const unsigned logLevel, const std::string & msg) {
+    
+    // check if we have the right to print the log
+    if (this->debugLevel < logLevel) {
+        return;
+    }
+
+    // print title and set principal color
+    system("Color 0" + this->infoColors.first);
+    std::cout << "[LOG INFORMATION]" << std::endl;
+
+    // print message trace and set secondary color
+    system("Color 0" + this->infoColors.second);
     std::cout << "Trace : " << msg << std::endl;
 
     // reset terminal default color
