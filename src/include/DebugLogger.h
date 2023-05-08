@@ -56,6 +56,16 @@ namespace nsCppLogger {
      * of the code execution.
      */
     class DebugLogger {
+        private:
+            // FIELDS
+            unsigned debugLevel;
+            
+            HANDLE outHandle;
+            textColor_t errorColors;
+            textColor_t warningColors;
+            textColor_t infoColors;
+
+
         public:
             // CONSTRUCTOR
             /**
@@ -153,29 +163,6 @@ namespace nsCppLogger {
              * @param msg [in] : The information to print
              */
             void inform(const unsigned logLevel, const std::string & msg);
-
-        private:
-            // FIELDS
-            unsigned debugLevel;
-            
-            HANDLE outHandle;
-            textColor_t errorColors;
-            textColor_t warningColors;
-            textColor_t infoColors;
-
-
-            // METHODS
-            /**
-             * @brief Convert LoggerColor to char.
-             * 
-             * Convert a LoggerColor enum value to a character identifier of the color.
-             * The character is used to the "system" function of the "windows.h" file.
-             * 
-             * @param color [in] : The enum value to convert
-             * 
-             * @return The character color identifer
-             */
-            char convertColorEnumToChar(const LoggerColor color);
     };
 }
 
