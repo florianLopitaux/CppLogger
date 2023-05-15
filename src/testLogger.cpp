@@ -5,7 +5,7 @@
 
 
 int main() {
-    nsCppLogger::DebugLogger logger = nsCppLogger::DebugLogger();
+    nsCppLogger::DebugLogger logger;
 
     // logs doesn't print because we are in release mode (debug level = 0)
     logger.error(1, "HiddenError", "This error doesn't be display !");

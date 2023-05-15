@@ -1,12 +1,12 @@
 /**
  * @file src.include.LoggerColor.h
  * @author Florian Lopitaux
- * @version 0.1
+ * @version 1.0
  * @brief Header file of the LoggerColor enum.
  * 
  * --------------------------------------------------------------------
  *
- * Copyright (C) 2023  Florian Lopitaux
+ * Copyright (C) 2023 Florian Lopitaux
  *
  * Use of this software is governed by the GNU Public License, version 3.
  *

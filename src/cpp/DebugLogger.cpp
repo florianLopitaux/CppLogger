@@ -1,12 +1,12 @@
 /**
  * @file src.cpp.DebugLogger.cpp
  * @author Florian Lopitaux
- * @version 0.1
- * @brief source file of the DebugLogger class. Implements all methods.
+ * @version 1.0
+ * @brief source file of the DebugLogger class. Implements all class methods.
  * 
  * --------------------------------------------------------------------
  *
- * Copyright (C) 2023  Florian Lopitaux
+ * Copyright (C) 2023 Florian Lopitaux
  *
  * Use of this software is governed by the GNU Public License, version 3.
  *
@@ -33,7 +33,7 @@
 
 /*
 * ---------------------------------------------
-* CONSTRUCTOR
+* CONSTRUCTORS & DESTRUCTOR
 * ---------------------------------------------
 */
 nsCppLogger::DebugLogger::DebugLogger(const unsigned level) {
@@ -43,6 +43,36 @@ nsCppLogger::DebugLogger::DebugLogger(const unsigned level) {
     this->errorColors = std::make_pair(LoggerColor::RED, LoggerColor::LIGHT_RED);
     this->warningColors = std::make_pair(LoggerColor::YELLOW, LoggerColor::LIGHT_YELLOW);
     this->infoColors = std::make_pair(LoggerColor::GREEN, LoggerColor::LIGHT_GREEN);
+
+    // display the initialization of the logger
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::LIGHT_BLUE);
+    std::cout << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
+
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+}
+
+nsCppLogger::DebugLogger::DebugLogger(const std::string & logFilePath, const unsigned level) {
+    this->debugLevel = level;
+
+    // open the log file and print the initialization of the logger
+    this->logFile.open(logFilePath);
+    this->logFile << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
+}
+
+nsCppLogger::DebugLogger::~DebugLogger() {
+    // print the closing of the logger
+    if (this->logFile.is_open()) {
+        this->logFile << ">>>>>>>>>  [LOGGER CLOSED]  <<<<<<<<<" << std::endl;
+
+        this->logFile.close(); // close the log file
+
+    } else {
+        SetConsoleTextAttribute(this->outHandle, LoggerColor::LIGHT_BLUE);
+        std::cout << ">>>>>>>>>  [LOGGER CLOSED]  <<<<<<<<<" << std::endl;
+
+        // reset console default color
+        SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+    }
 }
 
 
@@ -94,19 +124,24 @@ void nsCppLogger::DebugLogger::error(const unsigned logLevel,
         return;
     }
 
-    // print title and set principal color
-    SetConsoleTextAttribute(this->outHandle, this->errorColors.first);
-    std::cout << std::endl
-              << "[LOG ERROR] - " << typeError
-              << std::endl;
+    // check if we write in the log file or in the console
+    if (this->logFile.is_open()) {
+        // print the error
+        this->logFile << "[LOG ERROR] - " << typeError << std::endl
+                      << "Stack Trace : " << msg << std::endl << std::endl;
 
-    // print message trace and set secondary color
-    SetConsoleTextAttribute(this->outHandle, this->errorColors.second);
-    std::cout << "Trace : " << msg
-              << std::endl << std::endl;
+    } else {
+        // print title and set principal color
+        SetConsoleTextAttribute(this->outHandle, this->errorColors.first);
+        std::cout << "[LOG ERROR] - " << typeError << std::endl;
 
-    // reset terminal default color
-    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+        // print message trace and set secondary color
+        SetConsoleTextAttribute(this->outHandle, this->errorColors.second);
+        std::cout << "Stack Trace : " << msg << std::endl << std::endl;
+
+        // reset console default color
+        SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+    }
 }
 
 void nsCppLogger::DebugLogger::warning(const unsigned logLevel, const std::string & msg) {
@@ -119,19 +154,24 @@ void nsCppLogger::DebugLogger::warning(const unsigned logLevel, const std::strin
         return;
     }
 
-    // print title and set principal color
-    SetConsoleTextAttribute(this->outHandle, this->warningColors.first);
-    std::cout << std::endl 
-              << "[LOG WARNING]" 
-              << std::endl;
+    // check if we write in the log file or in the console
+    if (this->logFile.is_open()) {
+        // print the warning
+        this->logFile << "[LOG WARNING] " << std::endl
+                      << "Stack Trace : " << msg << std::endl << std::endl;
 
-    // print message trace and set secondary color
-    SetConsoleTextAttribute(this->outHandle, this->warningColors.second);
-    std::cout << "Trace : " << msg
-              << std::endl << std::endl;
+    } else {
+        // print title and set principal color
+        SetConsoleTextAttribute(this->outHandle, this->warningColors.first);
+        std::cout << "[LOG WARNING]" << std::endl;
 
-    // reset terminal default color
-    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+        // print message trace and set secondary color
+        SetConsoleTextAttribute(this->outHandle, this->warningColors.second);
+        std::cout << "Stack Trace : " << msg << std::endl << std::endl;
+
+        // reset console default color
+        SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+    }
 }
 
 void nsCppLogger::DebugLogger::inform(const unsigned logLevel, const std::string & msg) {
@@ -144,17 +184,22 @@ void nsCppLogger::DebugLogger::inform(const unsigned logLevel, const std::string
         return;
     }
 
-    // print title and set principal color
-    SetConsoleTextAttribute(this->outHandle, this->infoColors.first);
-    std::cout << std::endl 
-              << "[LOG INFORMATION]" 
-              << std::endl;
+    // check if we write in the log file or in the console
+    if (this->logFile.is_open()) {
+        // print the information
+        this->logFile << "[LOG INFORMATION] " << std::endl
+                      << "Stack Trace : " << msg << std::endl << std::endl;
 
-    // print message trace and set secondary color
-    SetConsoleTextAttribute(this->outHandle, this->infoColors.second);
-    std::cout << "Trace : " << msg
-              << std::endl << std::endl;
+    } else {
+        // print title and set principal color
+        SetConsoleTextAttribute(this->outHandle, this->infoColors.first);
+        std::cout << "[LOG INFORMATION]" << std::endl;
 
-    // reset terminal default color
-    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+        // print message trace and set secondary color
+        SetConsoleTextAttribute(this->outHandle, this->infoColors.second);
+        std::cout << "Stak Trace : " << msg << std::endl << std::endl;
+
+        // reset console default color
+        SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+    }
 }
