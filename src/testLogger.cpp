@@ -4,8 +4,15 @@
 
 
 
-int main() {
-    nsCppLogger::DebugLogger logger;
+int main(int argc, char *argv[]) {
+    std::string logFileParameter = "";
+
+    // check executable arguments to know if we print in a log file or the console
+    if (argc == 2) {
+        logFileParameter = argv[1];
+    }
+
+    nsCppLogger::DebugLogger logger (logFileParameter);
 
     // logs doesn't print because we are in release mode (debug level = 0)
     logger.error(1, "HiddenError", "This error doesn't be display !");

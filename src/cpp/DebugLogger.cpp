@@ -39,24 +39,17 @@
 nsCppLogger::DebugLogger::DebugLogger(const unsigned level) {
     this->debugLevel = level;
 
-    this->outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    this->errorColors = std::make_pair(LoggerColor::RED, LoggerColor::LIGHT_RED);
-    this->warningColors = std::make_pair(LoggerColor::YELLOW, LoggerColor::LIGHT_YELLOW);
-    this->infoColors = std::make_pair(LoggerColor::GREEN, LoggerColor::LIGHT_GREEN);
-
-    // display the initialization of the logger
-    SetConsoleTextAttribute(this->outHandle, LoggerColor::LIGHT_BLUE);
-    std::cout << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
-
-    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+    this->enableConsoleMode();
 }
 
 nsCppLogger::DebugLogger::DebugLogger(const std::string & logFilePath, const unsigned level) {
     this->debugLevel = level;
 
-    // open the log file and print the initialization of the logger
-    this->logFile.open(logFilePath);
-    this->logFile << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
+    if (logFilePath.empty()) {
+        this->enableConsoleMode();
+    } else {
+        this->enableLogFileMode(logFilePath);
+    }
 }
 
 nsCppLogger::DebugLogger::~DebugLogger() {
@@ -64,7 +57,8 @@ nsCppLogger::DebugLogger::~DebugLogger() {
     if (this->logFile.is_open()) {
         this->logFile << ">>>>>>>>>  [LOGGER CLOSED]  <<<<<<<<<" << std::endl;
 
-        this->logFile.close(); // close the log file
+        // close the log file
+        this->logFile.close();
 
     } else {
         SetConsoleTextAttribute(this->outHandle, LoggerColor::LIGHT_BLUE);
@@ -202,4 +196,31 @@ void nsCppLogger::DebugLogger::inform(const unsigned logLevel, const std::string
         // reset console default color
         SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
     }
+}
+
+
+/*
+* ---------------------------------------------
+* PRIVATE METHODS
+* ---------------------------------------------
+*/
+void nsCppLogger::DebugLogger::enableConsoleMode() {
+    // Get the console handle and initialize default colors
+    this->outHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+    this->errorColors = std::make_pair(LoggerColor::RED, LoggerColor::LIGHT_RED);
+    this->warningColors = std::make_pair(LoggerColor::YELLOW, LoggerColor::LIGHT_YELLOW);
+    this->infoColors = std::make_pair(LoggerColor::GREEN, LoggerColor::LIGHT_GREEN);
+
+    // display the initialization of the logger
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::LIGHT_BLUE);
+    std::cout << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
+
+    // reset console default color
+    SetConsoleTextAttribute(this->outHandle, LoggerColor::WHITE);
+}
+
+void nsCppLogger::DebugLogger::enableLogFileMode(const std::string & path) {
+    // open the log file and print the initialization of the logger
+    this->logFile.open(path);
+    this->logFile << ">>>>>>>>>  [LOGGER INITIALIZED]  <<<<<<<<<" << std::endl << std::endl;
 }
