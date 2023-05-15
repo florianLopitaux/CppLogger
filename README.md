@@ -10,6 +10,7 @@ If you don't know how to do this, you can follow this short tutorial just below.
 > Download the header files (.h) in the **include** folder and the archive file (.a) in the **lib** folder and put them in your project.
 
 *example of project architecture*
+
 ![project architecture](assets/project-architecture.jpg)
 
 <br/>
