@@ -38,6 +38,6 @@ g++ myProgram.cpp -o myProgram.exe -I include/ -L lib/ -lCppLogger
 <br/>
 
 4. Enjoy
-> And thath's it, your program should be worked !
+> And that's it, your program should be worked !
 
 Enjoy your use of **CppLogger** 🙂
