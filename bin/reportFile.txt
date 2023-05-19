@@ -3,7 +3,7 @@
 [LOG ERROR] - Test Error
 Stack Trace : This error is a test which is displayed on the terminal.
 
-[LOG WARNING] 
+[LOG WARNING]
 Stack Trace : This warning is a test which is displayed on the terminal.
 
 [LOG INFORMATION] 
