@@ -1,8 +1,8 @@
 /**
  * @file src.cpp.DebugLogger.cpp
  * @author Florian Lopitaux
- * @version 1.0
- * @brief source file of the DebugLogger class. Implements all class methods.
+ * @version 1.1
+ * @brief source file of the DebugLogger class, implements all class methods.
  * 
  * --------------------------------------------------------------------
  *

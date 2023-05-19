@@ -1,7 +1,7 @@
 /**
  * @file src.include.LoggerColor.h
  * @author Florian Lopitaux
- * @version 1.0
+ * @version 1.1
  * @brief Header file of the LoggerColor enum.
  * 
  * --------------------------------------------------------------------
