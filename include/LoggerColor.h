@@ -1,7 +1,7 @@
 /**
  * @file src.include.LoggerColor.h
  * @author Florian Lopitaux
- * @version 1.0
+ * @version 1.1
  * @brief Header file of the LoggerColor enum.
  * 
  * --------------------------------------------------------------------
@@ -26,7 +26,7 @@
  * This banner notice must not be removed.
  * 
  * --------------------------------------------------------------------
- */
+*/
 
 #ifndef COLORS_LOGGER_H
 #define COLORS_LOGGER_H
@@ -37,10 +37,12 @@
  * @brief Namespace that contains all the class, enum, ... of the CppLogger library.
  */
 namespace nsCppLogger {
+    #ifdef _WIN32 // we are on a windows os
+    
     /**
      * @enum LoggerColor
      * @brief The colors available of the log trace.
-     */
+    */
     enum LoggerColor {
         BLACK,
         BLUE,
@@ -49,16 +51,27 @@ namespace nsCppLogger {
         RED,
         PURPLE,
         YELLOW,
-        WHITE,
-        GRAY,
-        LIGHT_BLUE,
-        LIGHT_GREEN,
-        LIGHT_AQUA,
-        LIGHT_RED,
-        LIGHT_PURPLE,
-        LIGHT_YELLOW,
-        BRIGHT_WHITE
+        WHITE
     };
+
+    #else // we are on a linux or mac os
+
+    /**
+     * @enum LoggerColor
+     * @brief The colors available of the log trace.
+    */
+    enum LoggerColor {
+        BLACK = 30,
+        RED = 31,
+        GREEN = 32,
+        YELLOW = 33,
+        BLUE = 34,
+        PURPLE = 35,
+        CYAN = 36,
+        WHITE = 37
+    };
+
+    #endif
 }
 
 #endif

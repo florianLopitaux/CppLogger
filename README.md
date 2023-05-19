@@ -1,5 +1,5 @@
-# CppLogger Version 1.0
-CppLogger is cross-platform develoment light library to display beautiful message of logging in your console or in an output file.
+# CppLogger Version 1.1
+CppLogger is an open-source cross-platform develoment C++ lightweight library to display beautiful message of logging in your console or in an output file.
 More documentation is available in the README.md of the [main branch](https://github.com/florianLopitaux/CppLogger/tree/main) of this repository.
 
 The library can be used simply by doing a basic link edit with the static library at compile time.

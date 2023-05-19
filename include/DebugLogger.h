@@ -1,7 +1,7 @@
 /**
  * @file src.include.DebugLogger.h
  * @author Florian Lopitaux
- * @version 1.0
+ * @version 1.1
  * @brief Header file of the DebugLogger class.
  * 
  * --------------------------------------------------------------------
@@ -33,7 +33,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "windows.h"
 
 #include "LoggerColor.h"
 
@@ -43,12 +42,6 @@
  * @brief Namespace that contains all the class, enum, ... of the CppLogger library.
 */
 namespace nsCppLogger {
-    /**
-     * @typedef textColor_t
-     * @brief Type representing the two colors needed by a type log. 
-    */
-    typedef std::pair<LoggerColor, LoggerColor> textColor_t;
-
     /**
      * @class DebugLogger
      * @brief Class representing the logger object.
@@ -63,10 +56,9 @@ namespace nsCppLogger {
 
             std::ofstream logFile;
 
-            HANDLE outHandle;
-            textColor_t errorColors;
-            textColor_t warningColors;
-            textColor_t infoColors;
+            LoggerColor errorColor;
+            LoggerColor warningColor;
+            LoggerColor infoColor;
 
 
             // PRIVATE METHODS
@@ -78,9 +70,16 @@ namespace nsCppLogger {
             /**
              * @brief Initialize everything to print in a log file.
              * 
-             * @param path [in] The path of the log file
+             * @param path {std::string} [in] The path of the log file
             */
             void enableLogFileMode(const std::string & path);
+
+            /**
+             * @brief Set the text color of the terminal output.
+             * 
+             * @param color {nsCppLogger::LoggerColor} [in] The color to applied on the text
+            */
+            void setTerminalColor(const LoggerColor color) const;
 
 
         public:
@@ -91,7 +90,7 @@ namespace nsCppLogger {
              * Instantiate an object of the DebugLogger class,
              * initialize everything to begin to print in the console.
              * 
-             * @param level [in] [optional] The level of debugging, 0 by default
+             * @param level {unsigned} [in] [optional] The level of debugging, 0 by default
             */
             DebugLogger(const unsigned level = 0);
 
@@ -103,8 +102,8 @@ namespace nsCppLogger {
              * 
              * If the path parameter is an empty string, we activate the console print mode.
              * 
-             * @param logFilePath [in] The path of the file to print the logs.
-             * @param level [in] [optional] The level of debugging, 0 by default
+             * @param logFilePath {std::string} [in] The path of the file to print the logs
+             * @param level {unsigned} [in] [optional] The level of debugging, 0 by default
             */
             DebugLogger(const std::string & logFilePath, const unsigned level = 0);
 
@@ -122,7 +121,7 @@ namespace nsCppLogger {
              * 
              * Get the current debugging level of the logger.
              * 
-             * @return The level of debugging
+             * @return {unsigned} The level of debugging
             */
             unsigned getDebugLevel();
 
@@ -133,39 +132,36 @@ namespace nsCppLogger {
              * 
              * Change the current debugging level of the logger.
              * 
-             * @param level [in] The new debugging level
+             * @param level {unsigned} [in] The new debugging level
             */
             void setDebugLevel(const unsigned level);
 
             /**
              * @brief Setter of the 'errorColors' attribute.
              * 
-             * Change the colors used to print the error in the terminal.
+             * Change the color used to print the error in the terminal.
              * 
-             * @param primaryColor [in] The color used to the error balise and the error type
-             * @param secondaryColor [in] The color used to the description message
+             * @param color {LoggerColor} [in] The color used to the error logs
             */
-            void setErrorColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setErrorColors(const LoggerColor color);
 
             /**
              * @brief Setter of the 'warningColors' attribute.
              * 
-             * Change the colors used to print the warning in the terminal.
+             * Change the color used to print the warning in the terminal.
              * 
-             * @param primaryColor [in] The color used to the warning balise
-             * @param secondaryColor [in] The color used to the description message
+             * @param color {LoggerColor} [in] The color used to the warning logs
             */
-            void setWarningColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setWarningColors(const LoggerColor color);
 
             /**
              * @brief Setter of the 'infoColors' attribute.
              * 
-             * Change the colors used to print the information in the terminal.
+             * Change the color used to print the information in the terminal.
              * 
-             * @param primaryColor [in] The color used to the information balise
-             * @param secondaryColor [in] The color used to the description message
+             * @param color {LoggerColor} [in] The color used to the information logs
             */
-            void setInformationColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setInformationColors(const LoggerColor color);
 
 
             // PUBLIC METHODS
@@ -174,9 +170,9 @@ namespace nsCppLogger {
              * 
              * Print the trace of the error with the custom displaying.
              * 
-             * @param logLevel [in] The level needed to print the log
-             * @param typeError [in] The text resume of the error
-             * @param msg [in] The complete message description of the error
+             * @param logLevel {unsigned} [in] The level needed to print the log
+             * @param typeError {std::string} [in] The text resume of the error
+             * @param msg {std::string} [in] The complete message description of the error
             */
             void error(const unsigned logLevel, const std::string & typeError, const std::string & msg);
 
@@ -185,8 +181,8 @@ namespace nsCppLogger {
              * 
              * Print the trace of the warning with the custom displaying.
              * 
-             * @param logLevel [in] The level needed to print the log
-             * @param msg [in] The message of the warning
+             * @param logLevel {unsigned} [in] The level needed to print the log
+             * @param msg {std::string} [in] The message of the warning
             */
             void warning(const unsigned logLevel, const std::string & msg);
 
@@ -195,8 +191,8 @@ namespace nsCppLogger {
              * 
              * Print the trace of the information with the custom displaying.
              * 
-             * @param logLevel [in] The level needed to print the log
-             * @param msg [in] The information to print
+             * @param logLevel {unsigned} [in] The level needed to print the log
+             * @param msg {std::string} [in] The information to print
             */
             void inform(const unsigned logLevel, const std::string & msg);
     };
