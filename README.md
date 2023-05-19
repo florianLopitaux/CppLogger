@@ -1,5 +1,5 @@
 # CppLogger
-**CppLogger** is an open-source C++ lightweight library written and maintained by
+**CppLogger** is an open-source cross-platform C++ lightweight library written and maintained by
 [Florian Lopitaux](https://github.com/florianLopitaux).
 <br/>
 The purpose is to display beautiful messages of logging in your console or in an
@@ -31,6 +31,6 @@ available. It lists all proposed features and understand how use the library.
 ## Few details
 - Developed by : [Florian Lopitaux](https://github.com/florianLopitaux)
 - Creation Date : May 2023
-- Latest version : [1.0](https://github.com/florianLopitaux/CppLogger/releases/tag/release)
-- Operating Systems : Windows (linux and mac compatibility scheduled)
+- Latest version : [1.1](https://github.com/florianLopitaux/CppLogger/releases/tag/release)
+- Operating Systems : Windows, Linux, Mac
 - Programming Language : C++
