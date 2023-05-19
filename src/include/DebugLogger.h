@@ -33,7 +33,6 @@
 
 #include <iostream>
 #include <fstream>
-#include "windows.h"
 
 #include "LoggerColor.h"
 
@@ -43,12 +42,6 @@
  * @brief Namespace that contains all the class, enum, ... of the CppLogger library.
 */
 namespace nsCppLogger {
-    /**
-     * @typedef textColor_t
-     * @brief Type representing the two colors needed by a type log. 
-    */
-    typedef std::pair<LoggerColor, LoggerColor> textColor_t;
-
     /**
      * @class DebugLogger
      * @brief Class representing the logger object.
@@ -63,10 +56,9 @@ namespace nsCppLogger {
 
             std::ofstream logFile;
 
-            HANDLE outHandle;
-            textColor_t errorColors;
-            textColor_t warningColors;
-            textColor_t infoColors;
+            LoggerColor errorColor;
+            LoggerColor warningColor;
+            LoggerColor infoColor;
 
 
             // PRIVATE METHODS
@@ -81,6 +73,13 @@ namespace nsCppLogger {
              * @param path [in] The path of the log file
             */
             void enableLogFileMode(const std::string & path);
+
+            /**
+             * @brief Set the text color of the terminal output.
+             * 
+             * @param color [in] The color to applied on the text
+            */
+            void setTerminalColor(const LoggerColor color) const;
 
 
         public:
@@ -140,32 +139,29 @@ namespace nsCppLogger {
             /**
              * @brief Setter of the 'errorColors' attribute.
              * 
-             * Change the colors used to print the error in the terminal.
+             * Change the color used to print the error in the terminal.
              * 
-             * @param primaryColor [in] The color used to the error balise and the error type
-             * @param secondaryColor [in] The color used to the description message
+             * @param color [in] The color used to the error logs
             */
-            void setErrorColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setErrorColors(const LoggerColor color);
 
             /**
              * @brief Setter of the 'warningColors' attribute.
              * 
-             * Change the colors used to print the warning in the terminal.
+             * Change the color used to print the warning in the terminal.
              * 
-             * @param primaryColor [in] The color used to the warning balise
-             * @param secondaryColor [in] The color used to the description message
+             * @param color [in] The color used to the warning logs
             */
-            void setWarningColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setWarningColors(const LoggerColor color);
 
             /**
              * @brief Setter of the 'infoColors' attribute.
              * 
-             * Change the colors used to print the information in the terminal.
+             * Change the color used to print the information in the terminal.
              * 
-             * @param primaryColor [in] The color used to the information balise
-             * @param secondaryColor [in] The color used to the description message
+             * @param color [in] The color used to the information logs
             */
-            void setInformationColors(const LoggerColor primaryColor, const LoggerColor secondaryColor);
+            void setInformationColors(const LoggerColor color);
 
 
             // PUBLIC METHODS
